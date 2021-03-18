@@ -9,6 +9,7 @@ export default class RandomPlanet extends Component {
         <img
           className="planet-image"
           src="https://starwars-visualguide.com/assets/img/planets/5.jpg"
+          alt="planet"
         />
         <div>
           <h4>Planet Name</h4>
