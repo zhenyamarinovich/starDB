@@ -8,6 +8,18 @@ import PersonDetails from "../person-details";
 import "./app.css";
 
 const App = () => {
+  state = {
+    selectedPerson: null,
+  };
+
+  //65 видео 6 минута
+
+  onPersonSelected = (id) => {
+    this.setState({
+      selectedPerson: id,
+    });
+  };
+
   return (
     <div>
       <Header />
