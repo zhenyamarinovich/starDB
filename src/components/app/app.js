@@ -1,40 +1,65 @@
-import React from "react";
+import React, { Component } from "react";
 
 import Header from "../header";
 import RandomPlanet from "../random-planet";
+import ErrorIndicator from "../error-indicator";
+import PeoplePage from "../people-page";
 import ItemList from "../item-list";
 import PersonDetails from "../person-details";
+import SwapiService from "../../services/swapi-service";
 
 import "./app.css";
 
-const App = () => {
+export default class App extends Component {
+  swapiService = new SwapiService();
+
   state = {
-    selectedPerson: null,
+    showRandomPlanet: true,
+    hasError: false,
   };
 
-  //65 видео 6 минута
-
-  onPersonSelected = (id) => {
+  componentDidCatch() {
     this.setState({
-      selectedPerson: id,
+      error: true,
     });
-  };
+  }
 
-  return (
-    <div>
-      <Header />
-      <RandomPlanet />
+  render() {
+    const planet = this.state.showRandomPlanet ? <RandomPlanet /> : null;
 
-      <div className="row mb2">
-        <div className="col-md-6">
-          <ItemList />
+    if (this.state.hasError) {
+      return <ErrorIndicator />;
+    }
+
+    return (
+      <div className="stardb-app">
+        <Header />
+        {planet}
+        <PeoplePage />
+        <div className="row mb2">
+          <div className="col-md-6">
+            <ItemList
+              onItemSelected={this.onPersonSelected}
+              getData={this.swapiService.getAllPlanets}
+            />
+          </div>
+          <div className="col-md-6">
+            <PersonDetails personId={this.state.selectedPerson} />
+          </div>
         </div>
-        <div className="col-md-6">
-          <PersonDetails />
+
+        <div className="row mb2">
+          <div className="col-md-6">
+            <ItemList
+              onItemSelected={this.onPersonSelected}
+              getData={this.swapiService.getAllStarships}
+            />
+          </div>
+          <div className="col-md-6">
+            <PersonDetails personId={this.state.selectedPerson} />
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
-
-export default App;
+    );
+  }
+}
