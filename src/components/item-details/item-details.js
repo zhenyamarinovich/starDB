@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import Spinner from "../spinner/spinner";
 
 import "./item-details.css";
-import SwapiService from "../../services/swapi-service";
 
 const Record = ({ item, field, label }) => {
   return (
@@ -16,11 +14,8 @@ const Record = ({ item, field, label }) => {
 export { Record };
 
 export default class ItemDetails extends Component {
-  swapiService = new SwapiService();
-
   state = {
     item: null,
-    loading: true,
     image: null,
   };
 
@@ -43,32 +38,27 @@ export default class ItemDetails extends Component {
     getData(itemId).then((item) => {
       this.setState({
         item,
-        loading: false,
         image: getImageUrl(item),
       });
     });
   }
 
   render() {
-    const { item, loading, image } = this.state;
+    const { item, image } = this.state;
     if (!item) {
       return <span>Select a item from a list</span>;
     }
 
-    if (loading) {
-      return <Spinner />;
-    }
-
-    const { id, name, gender, birthYear, eyeColor } = item;
+    const { name } = item;
 
     return (
       <div className="item-details card">
-        <img className="item-image" src={image} alt="character" />
+        <img className="item-image" src={image} alt="item" />
 
         <div className="card-body">
           <h4>{name}</h4>
           <ul className="list-group list-group-flush">
-            {React.Children.map(this.props.children, (child, indx) => {
+            {React.Children.map(this.props.children, (child) => {
               return React.cloneElement(child, { item });
             })}
           </ul>
